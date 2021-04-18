@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author 陈亦铖
  */
@@ -23,7 +25,9 @@ public class AuthorizeController {
     @Value("#{github.redirect.uri}")
     private String redirectUri;
     @GetMapping("/callback")
-    public String callBack(@RequestParam(name="code")String code,@RequestParam(name="state")String state){
+    public String callBack(@RequestParam(name="code")String code,
+                           @RequestParam(name="state")String state,
+                           HttpServletRequest request){
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setState(state);
@@ -32,6 +36,10 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(redirectUri);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser user = githubProvider.getUser(accessToken);
-        return "index";
+        if (user !=null){
+            request.getSession().setAttribute("user",user);
+            return "redirect:/";
+        }else{return "redirect:/";}
+
     }
 }
