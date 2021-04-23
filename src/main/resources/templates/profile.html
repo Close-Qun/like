@@ -1,22 +1,22 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>酆都城</title>
+    <title th:text="${sectionName}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="css/community.css"/>
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/css/community.css"/>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <span class="glyphicon glyphicon-yen" aria-hidden="true"><h2>发现</h2></span>
+           <h2><span th:text="${sectionName}"></span></h2>
             <hr>
-            <div class="media" th:each="question:${questions.question}">
+            <div class="media" th:each="question:${pagination.questions}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-circle"  th:src="@{question.avatarUrl}" >
@@ -24,7 +24,7 @@
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading">悬赏九千万</h4>
-                    <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                    点击了解详情~<br>
                     <span class="text-desc"><span th:text="${#dates.format(question.gmtCreat,'dd MMMM yyyy')}"></span></span>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li th:each="page:${questions.pages}"><a href="/" th:text="${page}" th:href="@{/(page=${page})}" th:class="${questions.pages==page}?'active':''"></a></li>
+                    <li th:each="page:${pagination.pages}"><a href="/" th:text="${page}" th:href="@{/(page=${page})}" th:class="${pagination.pages==page}?'active':''"></a></li>
                     <li>
                         <a href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>

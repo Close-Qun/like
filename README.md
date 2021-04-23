@@ -87,7 +87,7 @@ mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 [Count(*) VS Count(1)](https://mp.weixin.qq.com/s/Rwpke4BHu7Fz7KOpE2d3Lw)  
 [Git](https://git-scm.com/download)   
 [Visual Paradigm](https://www.visual-paradigm.com)    
-[Flyway](https://flywaydb.org/getstarted/firststeps/maven)  
+[Flyway](https://flywaydb.org/documentation/getstarted/firststeps/maven)  
 [Lombok](https://www.projectlombok.org)    
 [ctotree](https://www.octotree.io/)   
 [Table of content sidebar](https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej)    
