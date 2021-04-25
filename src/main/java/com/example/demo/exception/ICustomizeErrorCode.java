@@ -5,5 +5,5 @@ package com.example.demo.exception;
  */
 public interface ICustomizeErrorCode {
     String getMessage();
-    String getCode();
+    Integer getCode();
 }

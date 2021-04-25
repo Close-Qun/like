@@ -6,9 +6,11 @@
 <generatorConfiguration>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
+<!--        集成分页插件-->
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
         <jdbcConnection driverClass="org.h2.Driver"
                         connectionURL="jdbc:h2:~/demo-0418"
-                        userId="root"
+                        userId=""
                         password="">
         </jdbcConnection>
 
@@ -30,7 +32,7 @@
         </javaClientGenerator>
 
         <table tableName="user" domainObjectName="User" ></table>
-            <table tableName="question" domainObjectName="Question" ></table>
+        <table tableName="question" domainObjectName="Question" ></table>
 
 
 

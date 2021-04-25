@@ -2,6 +2,7 @@ package com.example.demo.interceptor;
 
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
+import com.example.demo.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author 陈亦铖
@@ -27,9 +29,12 @@ public class SessionInterceptor implements HandlerInterceptor {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
+                    UserExample example = new UserExample();
+                    example.createCriteria()
+                            .andTokenEqualTo(token);
+                    List<User> user = userMapper.selectByExample(example);
+                    if (user.size() !=0) {
+                        request.getSession().setAttribute("user", user.get(0));
                     }
                     break;
                 }
