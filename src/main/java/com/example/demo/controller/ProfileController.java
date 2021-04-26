@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.PaginationDTO;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
+import com.example.demo.model.UserExample;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author 陈亦铖
@@ -29,15 +31,18 @@ public class ProfileController {
                           HttpServletRequest request,
                           @RequestParam(name="page",defaultValue = "1")Integer page,
                           @RequestParam(name="size",defaultValue = "5")Integer size) {
-        User user = null;
+        List<User> user = null;
         Cookie[] cookies = request.getCookies();
         String token;
         if (cookies !=null && cookies.length !=0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
+                    UserExample example = new UserExample();
+                    example.createCriteria()
+                            .andTokenEqualTo(token);
+                    user = userMapper.selectByExample(example);
+                    if (user.size() !=0) {
                         request.getSession().setAttribute("user", user);
                     }
                     break;
@@ -57,7 +62,7 @@ public class ProfileController {
             model.addAttribute("sectionName","最新回复");
         }
 
-        PaginationDTO list = questionService.ListByUserId(user.getId(), page, size);
+        PaginationDTO list = questionService.ListByUserId(user.get(0).getId(), page, size);
         model.addAttribute("pagination",list);
         return "profile";
     }

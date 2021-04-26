@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CommentCreateDTO;
 import com.example.demo.dto.ResultDTO;
+import com.example.demo.mapper.CommentMapper;
 import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,8 @@ public class CommentController {
                        HttpServletRequest request){
         User user=(User) request.getSession().getAttribute("user");
         if (user ==null){
-            return ResultDTO.errorOf(2002,"No  pass")
+            return ResultDTO.errorOf(2002,"No  pass");
         }
+        return null;
     }
 }

@@ -23,7 +23,7 @@ public class QuestionController {
     @Autowired
     private CommentService commentService;
     @GetMapping("/question/{id}")
-    public String question(@PathVariable("id")Integer id, Model model){
+    public String question(@PathVariable("id")Long id, Model model){
         QuestionDTO questionDTO= questionService.getById(id);
         List<CommentDTO> comments=commentService.listByQuestionId(id);
         questionService.incView(id);
