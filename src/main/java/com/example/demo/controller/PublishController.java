@@ -5,6 +5,7 @@ import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Question;
 import com.example.demo.model.User;
+import com.example.demo.model.UserExample;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author 陈亦铖
@@ -27,7 +29,7 @@ public class PublishController {
     @Autowired
     private UserMapper userMapper;
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable("id")Integer id,Model model){
+    public String edit(@PathVariable("id")Long id,Model model){
         QuestionDTO question = questionService.getById(id);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
@@ -45,7 +47,7 @@ public class PublishController {
             @RequestParam(name = "title",required = false) String title,
             @RequestParam(name = "description",required = false) String description,
             @RequestParam(name = "tag",required = false) String tag,
-            @RequestParam("id") Integer id,
+            @RequestParam("id") Long id,
             HttpServletRequest request,
             Model model) {
         model.addAttribute("title", title);
@@ -74,8 +76,11 @@ public class PublishController {
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")) {
                 token = cookie.getValue();
-                user = userMapper.findByToken(token);
-                if (user != null) {
+                UserExample example = new UserExample();
+                example.createCriteria()
+                        .andTokenEqualTo(token);
+                List<User> users = userMapper.selectByExample(example);
+                if (users.size()!=0) {
                     model.addAttribute("error", "用户暂无登录信息");
                     return "publish";
                 }
@@ -83,8 +88,8 @@ public class PublishController {
             }
         }
         question.setCreator(user.getId());
-        question.setGmtCreat(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreat());
+        question.setGmtCreate(System.currentTimeMillis());
+        question.setGmtModified(question.getGmtCreate());
         question.setId(id);
         questionService.createOrUpdate(question);
 

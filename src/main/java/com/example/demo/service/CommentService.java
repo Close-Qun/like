@@ -2,9 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.dto.CommentDTO;
 import com.example.demo.enums.CommentTypeEnum;
+import com.example.demo.enums.NotificationEnum;
 import com.example.demo.mapper.CommentMapper;
+import com.example.demo.mapper.NotificationMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.CommentExample;
+import com.example.demo.model.Notification;
 import com.example.demo.model.User;
 import com.example.demo.model.UserExample;
 import org.springframework.beans.BeanUtils;
@@ -28,17 +31,22 @@ public class CommentService {
     private CommentMapper commentMapper;
     @Autowired
     private UserMapper userMapper;
-
+    @Autowired
+    private NotificationMapper notificationMapper;
     @Transactional//事务注解
     public void insert(Comment comment){
+        Notification record = new Notification();
+        record.setGmtCreate(System.currentTimeMillis());
+        record.setType(NotificationEnum.REPLY_COMMENT.getType());
 
+        notificationMapper.insert(record);
     }
 
-    public List<CommentDTO> listByQuestionId(Long id) {
+    public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
         CommentExample example = new CommentExample();
         example.createCriteria()
                 .andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.QUERTION.getType());
+                .andTypeEqualTo(type.getType());
         example.setOrderByClause("gmt_create desc");
         List<com.example.demo.model.Comment> comments = commentMapper.selectByExample(example);
         if (comments.size()==0){

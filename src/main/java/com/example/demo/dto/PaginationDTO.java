@@ -9,8 +9,8 @@ import java.util.List;
  * @author 陈亦铖
  */
 @Data
-public class PaginationDTO {
-    private List<QuestionDTO> question;
+public class PaginationDTO<T> {
+    private List<T> question;
     private boolean showPrevious;
     private boolean showFirstPage;
     private boolean showNext;
@@ -19,7 +19,7 @@ public class PaginationDTO {
     private List<Integer> pages = new ArrayList<>();
     private Integer totalPage;
 
-    public void setPagination(Integer totalPage, Integer page, Integer size) {
+    public void setPagination(Integer totalPage, Integer page) {
         this.totalPage=totalPage;
         this.page = page;
         if (page == 1) {
