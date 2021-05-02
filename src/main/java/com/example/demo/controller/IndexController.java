@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.cache.HotTagCache;
 import com.example.demo.dto.PaginationDTO;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.mapper.QuestionMapper;
@@ -24,7 +25,7 @@ import java.util.List;
 @Controller
 public class IndexController {
     @Autowired
-    private UserMapper userMapper;
+    private HotTagCache hotTagCache;
     @Autowired
     private QuestionService questionService;
 
@@ -36,7 +37,9 @@ public class IndexController {
 
 
         PaginationDTO pagination=questionService.List(page,size);
+        List<String> hots = hotTagCache.getHots();
         model.addAttribute("questions",pagination);
+        model.addAttribute("tags",hots);
         return "index";
     }
 }
